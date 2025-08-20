@@ -5,33 +5,33 @@ pipeline {
         stage('Repeated Build') {
             steps {
                 script {
-                    // Run for 5 minutes (300s) in 30s intervals
                     def start = System.currentTimeMillis()
-                    while ((System.currentTimeMillis() - start) < (5 * 60 * 1000)) {
+                    def duration = 5 * 60 * 1000  // 5 minutes
+
+                    while ((System.currentTimeMillis() - start) < duration) {
                         echo "Running build cycle at ${new Date()}"
+
                         sh '''
                           echo "Doing build work..."
                           date
                         '''
+
+                        emailext (
+                            to: 'Tanish.Pathania@iiitb.ac.in,Rutul.Patel@iiitb.ac.in,Hemang.Seth@iiitb.ac.in',
+                            subject: "Mailer iteration at ${new Date()}",
+                            body: """\
+Build cycle iteration finished.
+
+Job: ${env.JOB_NAME}
+Build: #${env.BUILD_NUMBER}
+Time: ${new Date()}
+"""
+                        )
+
                         sleep time: 30, unit: 'SECONDS'
                     }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            emailext (
-                to: 'Tanish.Pathania@iiitb.ac.in',
-                subject: "Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
-                body: """
-                Project: ${env.JOB_NAME}
-                Build: #${env.BUILD_NUMBER}
-                Status: ${currentBuild.currentResult}
-                URL: ${env.BUILD_URL}
-                """.stripIndent()
-            )
         }
     }
 }
