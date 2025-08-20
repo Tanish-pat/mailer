@@ -2,19 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Repeated Build') {
             steps {
-                sh '''
-                  echo "Building project..."
-                  date
-                '''
+                script {
+                    // Run for 5 minutes (300s) in 30s intervals
+                    def start = System.currentTimeMillis()
+                    while ((System.currentTimeMillis() - start) < (5 * 60 * 1000)) {
+                        echo "Running build cycle at ${new Date()}"
+                        sh '''
+                          echo "Doing build work..."
+                          date
+                        '''
+                        sleep time: 30, unit: 'SECONDS'
+                    }
+                }
             }
         }
     }
+
     post {
         always {
             emailext (
-                // to: 'Tanish.Pathania@iiitb.ac.in,Rutul.Patel@iiitb.ac.in,Hemang.Seth@iiitb.ac.in',
                 to: 'Tanish.Pathania@iiitb.ac.in',
                 subject: "Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
                 body: """
