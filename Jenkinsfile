@@ -14,7 +14,8 @@ pipeline {
     post {
         always {
             emailext (
-                to: 'Tanish.Pathania@iiitb.ac.in,Rutul.Patel@iiitb.ac.in,Hemang.Seth@iiitb.ac.in',
+                // to: 'Tanish.Pathania@iiitb.ac.in,Rutul.Patel@iiitb.ac.in,Hemang.Seth@iiitb.ac.in',
+                to: 'Tanish.Pathania@iiitb.ac.in',
                 subject: "Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
                 body: """
                 Project: ${env.JOB_NAME}
