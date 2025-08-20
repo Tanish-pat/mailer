@@ -17,7 +17,7 @@ pipeline {
                         '''
 
                         emailext (
-                            to: 'Tanish.Pathania@iiitb.ac.in,Rutul.Patel@iiitb.ac.in,Hemang.Seth@iiitb.ac.in',
+                            to: 'Tanish.Pathania@iiitb.ac.in',
                             subject: "Mailer iteration at ${new Date()}",
                             body: """\
 Build cycle iteration finished.
